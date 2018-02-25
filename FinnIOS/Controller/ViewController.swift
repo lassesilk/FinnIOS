@@ -171,6 +171,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    //This function helps with the image flickering while scrolling
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "adCell", for: indexPath) as! CustomAdCell
+        
+        cell.adImage.image = nil
+        
+    }
+    
     //MARK: - Load up data
     /**************************************************************************************************/
     

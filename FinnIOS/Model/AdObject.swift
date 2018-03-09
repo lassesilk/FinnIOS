@@ -1,6 +1,6 @@
 //
-//  NyAnnonse.swift
-//  Schibsted
+//  AdObject.swift
+//  FinnIOS
 //
 //  Created by Lasse Silkoset on 24.02.2018.
 //  Copyright © 2018 Lasse Silkoset. All rights reserved.
@@ -17,15 +17,18 @@ class AdObject {
     let url: String?
     let location: String?
     let id: String?
+    let favourited: Bool
     
     
-    init(adObjectImage: UIImage?, adObjectDescription: String?, adObjectPrice: Int?, adObjectUrl: String?, adObjectLocation: String?, adObjectId: String?) {
+    init(adObjectImage: UIImage?, adObjectDescription: String?, adObjectPrice: Int?, adObjectUrl: String?, adObjectLocation: String?, adObjectId: String?, adObjectfavourited: Bool) {
         image = adObjectImage
         description = adObjectDescription
         price = adObjectPrice
         url = adObjectUrl
         location = adObjectLocation
         id = adObjectId
+        favourited = adObjectfavourited
+        
        
     }
 }

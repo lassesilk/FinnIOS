@@ -1,6 +1,6 @@
 //
-//  Ad.swift
-//  parseJSON
+//  AdJSON.swift
+//  FinnIOS
 //
 //  Created by Lasse Silkoset on 15.02.2018.
 //  Copyright © 2018 Lasse Silkoset. All rights reserved.

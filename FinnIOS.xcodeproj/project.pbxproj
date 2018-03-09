@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C4077ED42050178B003B7895 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4077ED32050178B003B7895 /* NetworkClient.swift */; };
+		C4077ED6205086E0003B7895 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4077ED5205086E0003B7895 /* CoreDataStack.swift */; };
+		C4077EDD20509136003B7895 /* AdFromCoreData+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4077EDB20509136003B7895 /* AdFromCoreData+CoreDataClass.swift */; };
+		C4077EDE20509136003B7895 /* AdFromCoreData+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4077EDC20509136003B7895 /* AdFromCoreData+CoreDataProperties.swift */; };
+		C4077EE020516498003B7895 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4077EDF20516497003B7895 /* Extensions.swift */; };
 		C416A9B82042FF270048B611 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416A9B72042FF270048B611 /* AppDelegate.swift */; };
 		C416A9BA2042FF270048B611 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C416A9B92042FF270048B611 /* ViewController.swift */; };
 		C416A9BF2042FF270048B611 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C416A9BE2042FF270048B611 /* Assets.xcassets */; };
@@ -19,6 +24,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C4077ED32050178B003B7895 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		C4077ED5205086E0003B7895 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		C4077EDB20509136003B7895 /* AdFromCoreData+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdFromCoreData+CoreDataClass.swift"; sourceTree = "<group>"; };
+		C4077EDC20509136003B7895 /* AdFromCoreData+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AdFromCoreData+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		C4077EDF20516497003B7895 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C416A9B42042FF260048B611 /* FinnIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FinnIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C416A9B72042FF270048B611 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C416A9B92042FF270048B611 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -93,9 +103,14 @@
 		C416A9D22043135F0048B611 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C4077EDB20509136003B7895 /* AdFromCoreData+CoreDataClass.swift */,
+				C4077EDC20509136003B7895 /* AdFromCoreData+CoreDataProperties.swift */,
+				C4077ED32050178B003B7895 /* NetworkClient.swift */,
 				C416A9D32043137A0048B611 /* AdJSON.swift */,
 				C4AEDA462043157D00AC5C7E /* AdObject.swift */,
 				C4AEDA4820431FFD00AC5C7E /* AdDataModel.xcdatamodeld */,
+				C4077ED5205086E0003B7895 /* CoreDataStack.swift */,
+				C4077EDF20516497003B7895 /* Extensions.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -172,12 +187,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4077EDD20509136003B7895 /* AdFromCoreData+CoreDataClass.swift in Sources */,
 				C416A9D42043137A0048B611 /* AdJSON.swift in Sources */,
 				C4AEDA472043157D00AC5C7E /* AdObject.swift in Sources */,
 				C4AEDA4A20431FFD00AC5C7E /* AdDataModel.xcdatamodeld in Sources */,
 				C416A9BA2042FF270048B611 /* ViewController.swift in Sources */,
+				C4077ED42050178B003B7895 /* NetworkClient.swift in Sources */,
 				C416A9B82042FF270048B611 /* AppDelegate.swift in Sources */,
+				C4077EDE20509136003B7895 /* AdFromCoreData+CoreDataProperties.swift in Sources */,
 				C416A9CC20430C090048B611 /* CustomAdCell.swift in Sources */,
+				C4077EE020516498003B7895 /* Extensions.swift in Sources */,
+				C4077ED6205086E0003B7895 /* CoreDataStack.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

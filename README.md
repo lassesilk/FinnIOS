@@ -10,9 +10,9 @@ All values are still optional in case of unexpected nil-values.
 
 This time around I learned a lot! And I am really proud of the progress I have done in such a short period of time. I feel like I am on to something with this solution, but I still have an issue with flickering images, and I am wondering if the Core Data methods maybe should have been in another class. 
 
+I probably should have done a little more error handling with som UI-stuff. 
 
-
-
+Hope you like it.
 
 
 ----------------------------------------------------------------------------------------------------------------------------

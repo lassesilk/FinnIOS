@@ -38,33 +38,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         updateCollectionViewContent()
         
     }
-    
-    //Calling this func at viewDidLoad and if toogleSwitch is switched to false
-    
-    private func updateCollectionViewContent() {
-        do {
-            try self.fetchedhResultController.performFetch()
-            print("COUNT FETCHED FIRST: \(String(describing: self.fetchedhResultController.sections?[0].numberOfObjects))")
-        } catch let error  {
-            print("ERROR: \(error)")
-        }
-        
-        let networking = NetworkClient()
-        networking.loadItemsFromJSON { (result) in
-            switch result {
-            case .Success(let data):
-                //Calling deleteItemsInCoreData so that i only delete the ones with a boolean value == false.
-                //Making sure i do not get duplicate items in core data
-                self.deleteItemsInCoreData()
-                self.saveInCoreDataWith(array: data)
-            case .Error(let message):
-                print(message)
-                DispatchQueue.main.async {
-                    self.showAlertWith(title: "Error", message: message)
-                }
-            }
-        }
-    }
+  
     
     
     //MARK: - UI
@@ -105,8 +79,38 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     
+    //MARK: - CollectionView Content
+    //**************************************************************************************************/
     
-    //MARK: - CollectionVew
+    
+    //Calling this func at viewDidLoad and if toogleSwitch is switched to false
+    
+    private func updateCollectionViewContent() {
+        do {
+            try self.fetchedhResultController.performFetch()
+            print("COUNT FETCHED FIRST: \(String(describing: self.fetchedhResultController.sections?[0].numberOfObjects))")
+        } catch let error  {
+            print("ERROR: \(error)")
+        }
+        
+        let networking = NetworkClient()
+        networking.loadItemsFromJSON { (result) in
+            switch result {
+            case .Success(let data):
+                //Calling deleteItemsInCoreData so that i only delete the ones with a boolean value == false.
+                //Making sure i do not get duplicate items in core data
+                self.deleteItemsInCoreData()
+                self.saveInCoreDataWith(array: data)
+            case .Error(let message):
+                print(message)
+                DispatchQueue.main.async {
+                    self.showAlertWith(title: "Error", message: message)
+                }
+            }
+        }
+    }
+    
+    //MARK: - CollectionView
     //**************************************************************************************************/
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

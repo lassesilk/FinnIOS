@@ -1,5 +1,21 @@
 # FinnIOS
 
+Update:
+
+I have restructured the application using NSFetchedResultsController. My solution now consists of parsing a JSON at viewDidLoad, storing it temporarily in a local array, and then dispatching everything to core data. Then I manipulate a new attribute in Core Data, a bool thats called itemfavourited, via the didSelectItemAt method, and when the toogleSwitch gets pressed it deletes the items in Core Data with a boolean value of false. This gets interpreted from Core Data to the collectionView, via NSFetchedResultsControllerDelegate methods controllerDidChangeContent and didChange at indexPath. 
+
+When the toogleSwitch gets pressed again, the appliaction fetches from JSON again, but before storing in core data it checks via itemID, to see if there are any possible duplicates. In other words, if the ad already exists in core data, it does not duplicate it. Thats because I wanted the object to still be able to keep track of their attributes itemfavourited(bool) and itemimage(NSData).
+
+All values are still optional in case of unexpected nil-values. 
+
+This time around I learned a lot! And I am really proud of the progress I have done in such a short period of time. I feel like I am on to something with this solution, but I still have an issue with flickering images, and I am wondering if the Core Data methods maybe should have been in another class. 
+
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------------------------
 My solution to this challenge is populating an array of objects with optional properties, and then reloading the collection view. When starting the application up, this array gets populated from a JSON file, via the adData() function and a decodable struct. adData decides wether or not the array gets populated by the result from the JSON file, or from the objects that are stored in core data, depending on a boolean value that tracks if the toggleSwitch is enabled or disabled.
 
 If you enable the toggleSwitch, the application will clear the array and then go fetch objects from core data, if there are any. If you then disable it, it will clear the array again, and fetch items from the JSON file and re-pupulate the array with new objects.

@@ -16,6 +16,8 @@ This time around I learned a lot! And I am really proud of the progress I have d
 
 
 ----------------------------------------------------------------------------------------------------------------------------
+Original solution:
+
 My solution to this challenge is populating an array of objects with optional properties, and then reloading the collection view. When starting the application up, this array gets populated from a JSON file, via the adData() function and a decodable struct. adData decides wether or not the array gets populated by the result from the JSON file, or from the objects that are stored in core data, depending on a boolean value that tracks if the toggleSwitch is enabled or disabled.
 
 If you enable the toggleSwitch, the application will clear the array and then go fetch objects from core data, if there are any. If you then disable it, it will clear the array again, and fetch items from the JSON file and re-pupulate the array with new objects.

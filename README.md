@@ -4,15 +4,15 @@ Update:
 
 I have restructured the application using NSFetchedResultsController. My solution now consists of parsing a JSON at viewDidLoad, storing it temporarily in a local array, and then dispatching everything to core data. Then I manipulate a new attribute in Core Data, a bool thats called itemfavourited, via the didSelectItemAt method, and when the toogleSwitch gets pressed it deletes the items in Core Data with a boolean value of false. This gets interpreted from Core Data to the collectionView, via NSFetchedResultsControllerDelegate methods controllerDidChangeContent and didChange at indexPath. 
 
-When the toogleSwitch gets pressed again, the appliaction fetches from JSON again, but before storing in core data it checks via itemID, to see if there are any possible duplicates. In other words, if the ad already exists in core data, it does not duplicate it. Thats because I wanted the object to still be able to keep track of their attributes itemfavourited(bool) and itemimage(NSData).
+When the toogleSwitch gets pressed again, the appliaction fetches from JSON again, but before storing in core data it checks the itemID, to see if there are any possible duplicates. In other words, if the ad already exists in core data, it does not duplicate it. Thats because I wanted the object to still be able to keep track of their attributes itemfavourited(bool) and itemimage(NSData).
 
 All values are still optional in case of unexpected nil-values. 
 
-This time around I learned a lot! And I am really proud of the progress I have done in such a short period of time. I feel like I am on to something with this solution, but I still have an issue with flickering images, and I am wondering if the Core Data methods maybe should have been in another class. 
+This time around I learned a lot! And I am really proud of the progress I have done in such a short period of time. I feel like I am on to something with this solution, but I am wondering if the Core Data methods maybe should have been in another class. 
 
-I probably should have done a little more error handling with som UI-stuff. 
+If I had more time, I would like to point out something I would have liked to change. First of all, if the application already have 1000 items in Core Data at viewDidLoad, I should have not even performed the fetch from the JSON. At least not at the point of wich I am doing so. It is bad for the users dataplan, and it also contributes to a worse preformance overall. My ideal solution would have been to fetch data into the Collection View via a fetchResult predicate that limits the fetch to maybe 50 items, and then, when there was no more items left in Core Data to fetch, I would do a JSON fetch to see if there are any more items that has been added, that is, if it was dynamic. I am hoping to get some pointers on what I should have done to populate the collection view with a limited fetch.
 
-Hope you like it.
+
 
 
 ----------------------------------------------------------------------------------------------------------------------------

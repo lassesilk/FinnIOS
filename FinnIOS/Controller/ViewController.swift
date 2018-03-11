@@ -13,8 +13,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @IBOutlet weak var adCollectionView: UICollectionView!
     
+    //An outlet on the switch because i want to force the application in favourite mode when offline
+    @IBOutlet weak var toggle: UISwitch!
+    //a variable to keep track of wether or not the switch has been pressed before updating the view
+    var toggleGetsPressed = false
+    
+    //An array of blockOperations to communicate between Core Data and the Collection View.
     private var blockOperations = [BlockOperation]()
     
+    //Context is used frequently, so i declared it as a global private let.
     private let context = CoreDataStack.sharedInstance.persistentContainer.viewContext
     
     lazy var fetchedhResultController: NSFetchedResultsController<NSFetchRequestResult> = {
@@ -38,7 +45,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         updateCollectionViewContent()
         
     }
-  
+    
     
     
     //MARK: - UI
@@ -59,7 +66,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBAction func toggleSwitch(_ sender: UISwitch) {
         if sender.isOn {
             //Deleting items with a bool value == false. Wich in turn updates the view with items that have a bool value == true
+            toggleGetsPressed = true
             deleteItemsInCoreData()
+            
             
         } else {
             
@@ -71,7 +80,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     func showAlertWith(title: String, message: String, style: UIAlertControllerStyle = .alert) {
         
         let alertController = UIAlertController(title: title, message: message, preferredStyle: style)
-        let action = UIAlertAction(title: title, style: .default) { (action) in
+        let action = UIAlertAction(title: "Ok", style: .default) { (action) in
             self.dismiss(animated: true, completion: nil)
         }
         alertController.addAction(action)
@@ -84,26 +93,59 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     //Calling this func at viewDidLoad and if toogleSwitch is switched to false
-    
     private func updateCollectionViewContent() {
+        
         do {
+            
+            //Doing a fetch to make sure the Collection View knows what to do at viewDidLoad.
             try self.fetchedhResultController.performFetch()
-            print("COUNT FETCHED FIRST: \(String(describing: self.fetchedhResultController.sections?[0].numberOfObjects))")
+            
         } catch let error  {
             print("ERROR: \(error)")
         }
+        
+        let itemCount = fetchedhResultController.sections?[0].numberOfObjects
         
         let networking = NetworkClient()
         networking.loadItemsFromJSON { (result) in
             switch result {
             case .Success(let data):
-                //Calling deleteItemsInCoreData so that i only delete the ones with a boolean value == false.
-                //Making sure i do not get duplicate items in core data
-                self.deleteItemsInCoreData()
-                self.saveInCoreDataWith(array: data)
+                
+                //Making sure that the Collection View does not load up twice, if there already is elements in Core Data at viewDidLoad.
+                if itemCount != 0 {
+                    for object in data {
+                        let checkedItem = self.checkForItemInCoreData(id: object.id!)
+                        if checkedItem == true {
+                            //If user has pressed, it needs to repopulate the Collection View
+                            if self.toggleGetsPressed == true {
+                                self.deleteItemsInCoreData()
+                                self.saveInCoreDataWith(array: data)
+                                self.toggleGetsPressed = false
+                            }
+                            
+                        } else {
+                            //If items is not in Core Data, with favourited attribute, and toggle is pressed, it needs to delete and insert.
+                            if self.toggleGetsPressed == true {
+                                self.deleteItemsInCoreData()
+                                self.saveInCoreDataWith(array: data)
+                                self.toggleGetsPressed = false
+                                return
+                            } else {
+                                //protects against loading twice
+                                return
+                            }
+                        }
+                    }
+                } else {
+                    //If there are 0 objects in core data at viewDidLoad, or the toggle is pressed.
+                    self.saveInCoreDataWith(array: data)
+                }
             case .Error(let message):
                 print(message)
+                self.deleteItemsInCoreData()
+                
                 DispatchQueue.main.async {
+                    self.toggle.setOn(true, animated: true)
                     self.showAlertWith(title: "Error", message: message)
                 }
             }
@@ -138,8 +180,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         if let ad = fetchedhResultController.object(at: indexPath) as? AdFromCoreData {
             
+            
             let existsInCoreData = checkForItemInCoreData(id: cell.adId!)
-            print(existsInCoreData)
+            //Making sure image is not already stored in Core Data
             if existsInCoreData == false {
                 
                 ad.itemimage = UIImagePNGRepresentation(cell.adImage.image!) as NSData?
@@ -158,6 +201,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "adCell", for: indexPath) as! CustomAdCell
+        
+        cell.adImage.image = UIImage(named: "placeholder")
+        
+    }
+    
     //MARK: - NSFetchedResultsController
     //**************************************************************************************************/
     
@@ -166,20 +217,25 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         switch type {
         case .insert:
             blockOperations.append(BlockOperation(block: {
+                
                 //Inserting items when fetching from JSON
                 self.adCollectionView.insertItems(at: [newIndexPath!])
+                
             }))
         case .delete:
             blockOperations.append(BlockOperation(block: {
-                //Need this to change the view when toggleSwitch == true
+                //Need this to change the attribute itemfavourited
                 self.adCollectionView.deleteItems(at: [indexPath!])
             }))
+            
+            
         default:
             break
         }
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        
         adCollectionView.performBatchUpdates({
             
             for Operation in self.blockOperations {
@@ -195,9 +251,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     private func createAdEntityFrom(adFromArray: AdObject) -> NSManagedObject? {
-        //Checking items to prevent duplicates
+        //Checks if item already exists with attribute favourited
         let existsInCoreData = checkForItemInCoreData(id: adFromArray.id!)
-        
+        //Adds it to Core Data if it is not.
         if existsInCoreData == false {
             
             if let adEntity = NSEntityDescription.insertNewObject(forEntityName: "AdFromCoreData", into: context) as? AdFromCoreData {
@@ -242,6 +298,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         //Checking item via ID to see if favourited
         request.predicate = NSPredicate(format: "itemid == %@ AND itemfavourited == true", id)
         
+        
         var imageExistsInCoreData = false
         
         do {
@@ -270,8 +327,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             print(error)
         }
     }
-    
-    
+   
     
 }
 

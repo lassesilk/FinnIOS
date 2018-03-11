@@ -35,7 +35,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="170" height="210"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="H89-BX-NEd">
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="H89-BX-NEd">
                                                     <rect key="frame" x="0.0" y="0.0" width="170" height="170"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="170" id="Qgv-dE-6wL"/>
@@ -140,6 +140,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="adCollectionView" destination="IYl-HW-Nv9" id="ODL-yp-Dgz"/>
+                        <outlet property="toggle" destination="Vck-02-zsb" id="Tre-7T-J4z"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -165,4 +166,7 @@
             <point key="canvasLocation" x="-225" y="133"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="placeholder" width="1664" height="1114"/>
+    </resources>
 </document>

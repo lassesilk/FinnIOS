@@ -18,6 +18,8 @@ class CustomAdCell: UICollectionViewCell {
     
     var adId: String?
     
+    let netClient = NetworkClient()
+    
     func setCustomAdCell(ad: AdFromCoreData) {
         
         DispatchQueue.main.async {
@@ -49,24 +51,32 @@ class CustomAdCell: UICollectionViewCell {
             
             self.adId = ad.itemid
             
+            //Change imagesource if favourited, so it can be marked with a heart
             if ad.itemimage != nil {
                 self.adImage.image = UIImage(data: ad.itemimage! as Data)
-                print("Bruker bilde fra database")
                 self.adHeart.text = "♥︎"
                 self.adHeart.textColor = UIColor.white
             } else {
                 
                 let baseImageURL = "https://images.finncdn.no/dynamic/480x360c/"
-                
-                if let adURL = ad.itemurl {
-                    let finalURL = baseImageURL + adURL
-                    self.adImage.downloadedFrom(link: finalURL, contentMode: .scaleAspectFill)
-                    self.adHeart.text = "♡"
-                    self.adHeart.textColor = UIColor.white
-                    print("Bruker fra URL")
+                if let endURL = ad.itemurl {
+                    let finalURL = baseImageURL + endURL
+                    
+                    let url = URL(string: finalURL)
+                    self.netClient.imageURL = url
+                    
+                    self.netClient.loadImage { (fetch) in
+                        switch fetch {
+                        case .Success(let data):
+                            
+                            self.adImage.image = data
+                            self.adHeart.text = "♡"
+                            self.adHeart.textColor = UIColor.white
+                            
+                            
+                        }
+                    }
                 }
-                
-                
             }
         }
     }
